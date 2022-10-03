@@ -1,0 +1,59 @@
+             PGM
+             /* This sample program shows how to multi-thread */
+             /* A single program using ranges of values       */
+
+             DCL        VAR(&FLDLEN) TYPE(*DEC) LEN(5 0) VALUE(10)
+             DCL        VAR(&FIELD) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&WAIT) TYPE(*DEC) LEN(5 0) VALUE(-1)
+             DCL        VAR(&LONUM) TYPE(*CHAR) LEN(2)
+             DCL        VAR(&LOW) TYPE(*DEC) LEN(2 0)
+             DCL        VAR(&HINUM) TYPE(*CHAR) LEN(2)
+             DCL        VAR(&HIGH) TYPE(*DEC) LEN(2 0)
+             DCL        VAR(&JOBS) TYPE(*DEC) LEN(3 0) VALUE(1)
+             DCL        VAR(&JOBNUM) TYPE(*DEC) LEN(3 0) VALUE(0)
+             DCL        VAR(&STARTED) TYPE(*DEC) LEN(3 0)
+             DCL        VAR(&ENDED) TYPE(*DEC) LEN(3 0)
+             DCL        VAR(&JOBNAME) TYPE(*CHAR) LEN(11)
+             DCL        VAR(&JOBCHR) TYPE(*CHAR) LEN(2)
+
+             CHGDTAARA  DTAARA(STARTED) VALUE(0)
+             CHGDTAARA  DTAARA(ENDED) VALUE(0)
+
+             CALL       PGM(QCLRDTAQ) PARM(DTAQ1 *LIBL)
+
+             CHGVAR     VAR(&JOBS) VALUE(50)
+
+
+ SUBMIT:     CHGVAR     VAR(&LOW) VALUE(&JOBNUM * 100 / &JOBS)
+             CHGVAR     VAR(&JOBNUM) VALUE(&JOBNUM + 1)
+             CHGVAR     VAR(&JOBCHR) VALUE(&JOBNUM)
+             CHGVAR     VAR(&HIGH) VALUE(&JOBNUM * 100 / &JOBS - 1)
+             CHGVAR     VAR(&LONUM) VALUE(&LOW)
+             CHGVAR     VAR(&HINUM) VALUE(&HIGH)
+             CHGVAR     VAR(&JOBNAME) VALUE('DTAQ1' *TCAT &JOBCHR)
+
+       /* SUBMIT CLPGM1 IN A LOOP 50 TIMES, PASSING A RANGE FOR EACH */
+
+             SBMJOB     CMD(CALL PGM(CLPGM1) PARM(&LONUM &HINUM)) +
+                          JOB(&JOBNAME)
+
+             RTVDTAARA  DTAARA(STARTED) RTNVAR(&STARTED)
+             CHGVAR     VAR(&STARTED) VALUE(&STARTED + 1)
+             CHGDTAARA  DTAARA(STARTED) VALUE(&STARTED)
+
+             IF         COND(&JOBNUM < &JOBS) THEN(GOTO CMDLBL(SUBMIT))
+
+       /* WAIT FOR ALL SUBMITTED THREADS TO COMPLETE */
+ RCVDTAQ:    CALL       PGM(QRCVDTAQ) PARM(DTAQ1 *LIBL &FLDLEN +
+                          &FIELD &WAIT)
+
+             RTVDTAARA  DTAARA(ENDED) RTNVAR(&ENDED)
+             CHGVAR     VAR(&ENDED) VALUE(&ENDED + 1)
+             CHGDTAARA  DTAARA(ENDED) VALUE(&ENDED)
+
+             IF         COND(&STARTED *NE &ENDED) THEN(GOTO +
+                          CMDLBL(RCVDTAQ))
+
+       /* ALL THREADS COMPLETED, PROCESS CONTINUES */
+
+             ENDPGM
