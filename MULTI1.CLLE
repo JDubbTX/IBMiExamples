@@ -16,7 +16,7 @@
              DCL        VAR(&JOBNAME) TYPE(*CHAR) LEN(11)
              DCL        VAR(&JOBCHR) TYPE(*CHAR) LEN(2)
 
-             CHGDTAARA  DTAARA(STARTED) VALUE(1)
+             CHGDTAARA  DTAARA(STARTED) VALUE(0)
              CHGDTAARA  DTAARA(ENDED) VALUE(0)
 
              CALL       PGM(QCLRDTAQ) PARM(DTAQ1 *LIBL)
