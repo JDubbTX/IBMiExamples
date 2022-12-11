@@ -1,0 +1,10 @@
+{
+    "version": "0.0.1",
+    "description": "IBM i Examples",
+    "objlib": "DEVLIB",
+    "curlib": "DEVLIB",
+    "setIBMiEnvCmd": [],
+    "repository" : " https://github.com/JDubbTX/IBMiExamples.git",
+    "extensions": {
+    }
+}

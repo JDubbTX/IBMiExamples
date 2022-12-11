@@ -1,2 +1,2 @@
-multi1.pgm: multi1.pgm.clle
-clpgm1.pgm: clpgm1.pgm.clle
+MULTI1.PGM: MULTI1.PGM.CLLE
+CLPGM1.PGM: CLPGM.PGM.CLLE
