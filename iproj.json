@@ -1,8 +1,8 @@
 {
     "version": "0.0.1",
     "description": "IBM i Statements with BOB",
-    "objlib": "RDGJWEIRIC",
-    "curlib": "RDGJWEIRIC",
+    "objlib": "JWEIRICH1",
+    "curlib": "JWEIRICH1",
     "setIBMiEnvCmd": [],
     "repository" : " https://github.com/JDubbTX/IBMiExamples.git",
     "extensions": {

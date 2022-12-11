@@ -3,7 +3,7 @@
     "extensions": [
       "GLOBAL"
     ],
-    "name": "BDeploy and build all with Bob 🔨",
+    "name": "Deploy and build all with Bob 🔨",
     "command": "OPT=*EVENTF BUILDLIB=&CURLIB /QOpenSys/pkgs/bin/makei build",
     "environment": "pase",
     "deployFirst": true,

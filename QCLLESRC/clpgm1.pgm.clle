@@ -1,0 +1,6 @@
+             PGM
+             /* This sample program shows how to multi-thread */
+             /* A single program using ranges of values 2     */
+             DCL        VAR(&LONUM) TYPE(*CHAR) LEN(2)
+             DCL        VAR(&HINUM) TYPE(*CHAR) LEN(2)
+             

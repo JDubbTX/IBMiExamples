@@ -1,0 +1,8 @@
+/* This dataq will be used to signal to multi1 when each of the */
+/* submitted clpgm1 jobs have finished                          */
+
+CRTDTAQ DTAQ(DTAQ1)
+        MAXLEN(10)
+        SIZE(*MAX2GB)
+        AUTORCL(*YES)
+        TEXT('Multi Thread Data Queue 1')
