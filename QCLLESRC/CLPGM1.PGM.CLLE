@@ -1,6 +1,10 @@
-             PGM
+             PGM        PARM(&LONUM &HINUM) 
              /* This sample program shows how to multi-thread */
              /* A single program using ranges of values 2     */
              DCL        VAR(&LONUM) TYPE(*CHAR) LEN(2)
              DCL        VAR(&HINUM) TYPE(*CHAR) LEN(2)
-             
+
+/* Call the program for the passed range of values */
+             CALL       PGM(RPGPGM1) PARM(&LONUM &HINUM)
+
+endofpgm:    ENDPGM

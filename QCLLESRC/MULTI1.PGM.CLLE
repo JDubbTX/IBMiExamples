@@ -16,7 +16,7 @@
              /* examples uses the last two digits of a 9 char */
              /* key                                           */
              /*************************************************/
-
+             
              /* First declare some variables                  */
              DCL        VAR(&FLDLEN) TYPE(*DEC) LEN(5 0) VALUE(10)
              DCL        VAR(&FIELD) TYPE(*CHAR) LEN(10)
