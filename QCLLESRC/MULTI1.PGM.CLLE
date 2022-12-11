@@ -1,7 +1,23 @@
              PGM
+             /*************************************************/
              /* This sample program shows how to multi-thread */
-             /* A single program using ranges of values 2     */
+             /* A single program using value ranges.          */
+             /*                                               */
+             /* This example assumes you have a batch program */
+             /* that works over all (or most) records in a    */
+             /* table, in key order, where the record key     */
+             /* has a sufficiently randomized portion of the  */
+             /* key.                                          */
+             /*                                               */
+             /* For example, you wouldn't want to use the 1st */
+             /* two digits of SSN, assuming SSN is your key,  */
+             /* because the first 2 digits of an SSN are not  */
+             /* sufficiently randomized.  Instead, this       */
+             /* examples uses the last two digits of a 9 char */
+             /* key                                           */
+             /*************************************************/
 
+             /* First declare some variables                  */
              DCL        VAR(&FLDLEN) TYPE(*DEC) LEN(5 0) VALUE(10)
              DCL        VAR(&FIELD) TYPE(*CHAR) LEN(10)
              DCL        VAR(&WAIT) TYPE(*DEC) LEN(5 0) VALUE(-1)
@@ -16,6 +32,11 @@
              DCL        VAR(&JOBNAME) TYPE(*CHAR) LEN(11)
              DCL        VAR(&JOBCHR) TYPE(*CHAR) LEN(2)
 
+             /*************************************************/
+             /* Data areas privide visibility for your jobs   */
+             /* Initialize data areas that store the number   */
+             /* jobs started and stopped                      */
+             /*************************************************/
              CHGDTAARA  DTAARA(STARTED) VALUE(0)
              CHGDTAARA  DTAARA(ENDED) VALUE(0)
 
@@ -23,7 +44,7 @@
 
              CHGVAR     VAR(&JOBS) VALUE(50)
 
-
+            /* Calculate starting and ending ranges, based on &JOBS */
  SUBMIT:     CHGVAR     VAR(&LOW) VALUE(&JOBNUM * 100 / &JOBS)
              CHGVAR     VAR(&JOBNUM) VALUE(&JOBNUM + 1)
              CHGVAR     VAR(&JOBCHR) VALUE(&JOBNUM)
@@ -32,8 +53,7 @@
              CHGVAR     VAR(&HINUM) VALUE(&HIGH)
              CHGVAR     VAR(&JOBNAME) VALUE('DTAQ1' *TCAT &JOBCHR)
 
-       /* SUBMIT CLPGM1 IN A LOOP 50 TIMES, PASSING A RANGE FOR EACH */
-
+            /* SUBMIT CLPGM1 IN A LOOP 50 TIMES, PASSING A RANGE FOR EACH */
              SBMJOB     CMD(CALL PGM(CLPGM1) PARM(&LONUM &HINUM)) +
                           JOB(&JOBNAME)
 
@@ -43,7 +63,7 @@
 
              IF         COND(&JOBNUM < &JOBS) THEN(GOTO CMDLBL(SUBMIT))
 
-       /* WAIT FOR ALL SUBMITTED THREADS TO COMPLETE */
+            /* WAIT FOR ALL SUBMITTED THREADS TO COMPLETE */
  RCVDTAQ:    CALL       PGM(QRCVDTAQ) PARM(DTAQ1 *LIBL &FLDLEN +
                           &FIELD &WAIT)
 
@@ -54,6 +74,6 @@
              IF         COND(&STARTED *NE &ENDED) THEN(GOTO +
                           CMDLBL(RCVDTAQ))
 
-       /* ALL THREADS COMPLETED, PROCESS CONTINUES */
+            /* ALL THREADS COMPLETED, PROCESS CONTINUES */
 
              ENDPGM
