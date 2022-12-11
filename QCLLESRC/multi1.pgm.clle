@@ -1,6 +1,6 @@
              PGM
              /* This sample program shows how to multi-thread */
-             /* A single program using ranges of values       */
+             /* A single program using ranges of values 2     */
 
              DCL        VAR(&FLDLEN) TYPE(*DEC) LEN(5 0) VALUE(10)
              DCL        VAR(&FIELD) TYPE(*CHAR) LEN(10)

@@ -1,0 +1,28 @@
+[
+  {
+    "extensions": [
+      "GLOBAL"
+    ],
+    "name": "BDeploy and build all with Bob 🔨",
+    "command": "OPT=*EVENTF BUILDLIB=&CURLIB /QOpenSys/pkgs/bin/makei build",
+    "environment": "pase",
+    "deployFirst": true,
+    "postDownload": [
+      ".logs/joblog.json",
+      ".logs/output.log"
+    ]
+  },
+  {
+    "extensions": [
+      "GLOBAL"
+    ],
+    "name": "Deploy and Build current with Bob 🔨",
+    "command": "OPT=*EVENTF BUILDLIB=&CURLIB /QOpenSys/pkgs/bin/makei compile -f &BASENAME",
+    "environment": "pase",
+    "deployFirst": true,
+    "postDownload": [
+      ".logs/joblog.json",
+      ".logs/output.log"
+    ]
+  }
+]
