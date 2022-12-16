@@ -1,6 +1,6 @@
 {
     "version": "0.0.1",
-    "description": "IBM i Statements with BOB",
+    "description": "IBM i Examples",
     "objlib": "JWEIRICH1",
     "curlib": "JWEIRICH1",
     "setIBMiEnvCmd": [],
