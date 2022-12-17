@@ -2,7 +2,7 @@
 /* submitted clpgm1 jobs have finished                          */
 
 CRTDTAQ DTAQ(DTAQ1)
-        MAXLEN(10)
+        MAXLEN(11)
         SIZE(*MAX2GB)
         AUTORCL(*YES)
         TEXT('Multi Thread Data Queue 1')
