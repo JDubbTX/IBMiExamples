@@ -18,7 +18,7 @@ FROM SYSIBM.SYSDUMMY1;
 select * 
 from json_table(
     Systools.HTTPGETCLOB(
-    URL => CAST('https://namey.muffinlabs.com/name.json?count=10&with_surname=true&frequency=common' AS VARCHAR(255)),
+    URL => CAST('https://namey.muffinlabs.com/name.json?count=10&with_surname=true&frequency=common' AS VARCHAR(255) CCSID 37),
     HTTPHEADER => CAST(NULL AS CLOB(1K))
     ),'$'
     COLUMNS
