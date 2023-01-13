@@ -6,50 +6,21 @@ Dcl-Pi RPGPGM1;
   RangeEnd   char(2);
 End-Pi;
 
-Dcl-F customer Usage(*Update:*Delete:*Output);
+dcl-ds Customer_t extname('CUSTOMER') qualified alias template end-ds;
+dcl-s Cust_ID like(Customer_t.CUSTOMER_ID);
 
-Dcl-S lastdate     Packed(8:0);
-Dcl-S today        Packed(8:0);
-Dcl-S days         Packed(5:0);
+exec sql 
+  declare c1 cursor for 
+  select CUSTOMER_ID
+  from CUSTOMER_DDL_TABLE
+  where substr(CUSTOMER_ID , 7 , 2) >= :RangeStart
+    and substr(CUSTOMER_ID , 7 , 2) <= :RangeEnd;
+exec sql open c1;
+exec sql fetch c1 into :Cust_ID;
 
-exec sql select max(ordate)  into :lastdate from order;
-if lastdate = 0;
-  *inlr = *on;
-  return;
-ENDIF;
-today = %dec(%date():*iso);
-days = %diff(%date():%date(lastdate:*iso):*d);
-lastdate = %dec(%date() - %days(10):*iso);
-read order;
-dow not %eof;
-  ordate = %dec(%date(ordate:*iso) + %days(days):*iso);
-  if ordatdel > 0;
-    ordatdel = %dec(%date(ordatdel:*iso) + %days(days):*iso);
-    if  ordatdel > today;
-      ordatdel = 0;
-    ENDIF;
-  ENDIF;
-  if ordatclo > 0;
-    ordatclo = %dec(%date(ordatclo:*iso) + %days(days):*iso);
-    if  ordatclo > today ;
-      ordatclo = 0;
-    ENDIF;
-  else;
-    if ordatdel > 0 and ordatdel < lastdate ;
-      ordatclo =  %dec(%date(ordatdel:*iso) + %days(10):*iso);
-    ENDIF;
-  ENDIF;
-  oryear = %subdt(%date(ordate:*iso):*Y);
-  update forde;
-  read order;
+dow sqlcode = 0;
+  // Insert some logic to build a name
+  // update forde;
+  exec sql fetch c1 into :Cust_ID;
 ENDDO;
-exec sql Update detord d set odyear = (select oryear
-                from order where d.odorid = orid)
-                where odyear <> (select oryear
-                from order where d.odorid = orid) ;
-exec sql  UPDATE CUSTOMER  C SET CULASTORD =
-              ( SELECT MAX ( ORDATE ) FROM "ORDER"
-                      WHERE C.CUID = ORCUID )
-                WHERE EXISTS ( SELECT ORCUID FROM "ORDER"
-                      WHERE C.CUID = ORCUID );
 *inlr = *on;
