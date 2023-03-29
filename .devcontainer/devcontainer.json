@@ -15,7 +15,8 @@
 				"terminal.integrated.defaultProfile.linux": "bash"
 			},
 
-			"extensions": ["HalcyonTechLtd.ibm-i-development-pack"]          
+			"extensions": ["HalcyonTechLtd.ibm-i-development-pack",
+		                   "eamodio.gitlens"]          
 		}
 
 	},
