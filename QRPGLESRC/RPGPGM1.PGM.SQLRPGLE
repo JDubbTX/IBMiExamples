@@ -23,4 +23,5 @@ dow sqlcode = 0;
   // update forde;
   exec sql fetch c1 into :Cust_ID;
 ENDDO;
+// new comment
 *inlr = *on;
