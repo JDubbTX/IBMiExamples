@@ -34,14 +34,17 @@ stages:          # List of stages for jobs, and their order of execution
   - deploy
 
 before_script:
-  - apt-get update -qq
-  - apt-get install -qq git
   # Setup SSH deploy keys
-  - 'which ssh-agent || ( apt-get install -qq openssh-client )'
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
   - eval $(ssh-agent -s)
-  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
   - mkdir -p ~/.ssh
-  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  - chmod 700 ~/.ssh
+  - ssh-keyscan pub400.com >> ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+
+
+  # - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
