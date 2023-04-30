@@ -19,10 +19,10 @@
 
     
 deploy_staging:
-  type: deploy
+  #type: deploy
   environment:
     name: staging
-    url: example.com
+    url: https://example.com
   script:
     - ssh root@example.com "cd var/www/ && git checkout master && git pull origin master && exit"
   only:
