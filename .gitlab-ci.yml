@@ -57,10 +57,9 @@ build-job:
 
     - mkdir -p ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-    # ssh commands here
-   
+    # ssh commands here   
     - echo "Compiling the code with SSH and Bob..."
-    - ssh -p 2222 jweirich@pub400.com "cd ~/projects/JDUBTX/ && PATH=/QOpenSys/pkgs/bin:$PATH && git checkout main && git pull origin main && exit"
+    - ssh -p 2222 jweirich@pub400.com "cd ~/projects/JDUBTX/ && PATH=/QOpenSys/pkgs/bin:$PATH && git checkout main && git pull origin main && makei b && exit"
     - echo "Compile complete."
 
 unit-test-job:   # This job runs in the test stage.
