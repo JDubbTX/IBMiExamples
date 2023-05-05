@@ -50,7 +50,7 @@ build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Compiling the code with SSH and Bob..."
-    - ssh -p 2222 jweirich@pub400.com "cd ~/projects/IBMiExamples/ && git checkout main && git pull origin master && exit"
+    - ssh -p 2222 jweirich@pub400.com "cd ~/projects/JDUBTX/ && git checkout main && git pull origin main && exit"
     - echo "Compile complete."
 
 unit-test-job:   # This job runs in the test stage.
