@@ -16,7 +16,7 @@
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
-image: ubuntu
+image: alpine
     
 deploy_staging:
   #type: deploy
@@ -33,22 +33,32 @@ stages:          # List of stages for jobs, and their order of execution
   - test
   - deploy
 
-before_script:
-  # Setup SSH deploy keys
-  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
-  - eval $(ssh-agent -s)
-  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-  - mkdir -p ~/.ssh
-  - chmod 700 ~/.ssh
-  - ssh-keyscan -p 2222 pub400.com >> ~/.ssh/known_hosts
-  - chmod 644 ~/.ssh/known_hosts
+  # - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+  # - mkdir -p ~/.ssh
+  # - chmod 700 ~/.ssh
+  # - ssh-keyscan -p 2222 pub400.com >> ~/.ssh/known_hosts
+  # - chmod 644 ~/.ssh/known_hosts
 
 
   # - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
-build-job:       # This job runs in the build stage, which runs first.
+build-job:
+  image: alpine:3.6
+  before_script:
+  - apk update && apk add openssh-client bash
+       # This job runs in the build stage, which runs first.
   stage: build
   script:
+    # run ssh-agent
+    - eval $(ssh-agent -s)
+
+    # add ssh key stored in SSH_PRIVATE_KEY variable to the agent store
+    - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
+
+    - mkdir -p ~/.ssh
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    # ssh commands here
+   
     - echo "Compiling the code with SSH and Bob..."
     - ssh -p 2222 jweirich@pub400.com 
     - cd ~/projects/JDUBTX/
@@ -67,7 +77,6 @@ unit-test-job:   # This job runs in the test stage.
 lint-test-job:   # This job also runs in the test stage.
   stage: test    # It can run at the same time as unit-test-job (in parallel).
   script:
-    - echo "Linting code... This will take about 10 seconds."
     - sleep 10
     - echo "No lint issues found."
 
