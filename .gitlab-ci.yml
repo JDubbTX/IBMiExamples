@@ -18,16 +18,6 @@
 
 image: alpine
     
-deploy_staging:
-  #type: deploy
-  environment:
-    name: staging
-    url: https://example.com
-  script:
-    - ssh root@example.com "cd var/www/ && git checkout master && git pull origin master && exit"
-  only:
-    - master
-
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
@@ -48,22 +38,33 @@ build-job:
     # run ssh-agent
     - eval $(ssh-agent -s)
 
-    # add ssh key stored in SSH_PRIVATE_KEY variable to the agent store
+    # add private ssh key stored in SSH_PRIVATE_KEY variable to the agent store
     - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
 
-  # - $SSH_KNOWN_HOSTS was output from 'ssh-keyscan -p 2222 pub400.com'
+    # $SSH_KNOWN_HOSTS was output from 'ssh-keyscan -p 2222 pub400.com'
     - mkdir -p ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     # ssh commands here   
     - echo "Compiling the code with SSH and Bob..."
     - >
-      ssh -p 2222 jweirich@pub400.com 
+      OUTPUT=$(ssh -p 2222 jweirich@pub400.com 
       "cd ~/projects/JDUBTX/ && 
       PATH=/QOpenSys/pkgs/bin:$PATH && 
       git checkout main && 
       git pull origin main &&
       makei b &&
-      exit"
+      exit" | tee ssh-out.txt)
+    
+    # Check Output 
+      case "$OUTPUT" in 
+      *'make: Nothing to be done'*)
+        echo "Nothing Compiled"
+        ;;
+      *'Build Completed!'*)
+        ;;
+      *)
+        echo "Build Failed"
+      esac    
     - echo "Compile complete."
 
 unit-test-job:   # This job runs in the test stage.
