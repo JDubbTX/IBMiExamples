@@ -33,10 +33,6 @@ stages:          # List of stages for jobs, and their order of execution
   - test
   - deploy
 
-  # - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-  # - mkdir -p ~/.ssh
-  # - chmod 700 ~/.ssh
-  # - ssh-keyscan -p 2222 pub400.com >> ~/.ssh/known_hosts
   # - chmod 644 ~/.ssh/known_hosts
 
 
@@ -55,11 +51,19 @@ build-job:
     # add ssh key stored in SSH_PRIVATE_KEY variable to the agent store
     - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
 
+  # - $SSH_KNOWN_HOSTS was output from 'ssh-keyscan -p 2222 pub400.com'
     - mkdir -p ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     # ssh commands here   
     - echo "Compiling the code with SSH and Bob..."
-    - ssh -p 2222 jweirich@pub400.com "cd ~/projects/JDUBTX/ && PATH=/QOpenSys/pkgs/bin:$PATH && git checkout main && git pull origin main && makei b && exit"
+    - >
+      ssh -p 2222 jweirich@pub400.com 
+      "cd ~/projects/JDUBTX/ && 
+      PATH=/QOpenSys/pkgs/bin:$PATH && 
+      git checkout main && 
+      git pull origin main &&
+      makei b &&
+      exit"
     - echo "Compile complete."
 
 unit-test-job:   # This job runs in the test stage.
