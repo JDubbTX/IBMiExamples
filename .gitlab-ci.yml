@@ -38,6 +38,7 @@ build-job:
       "cd ~/projects/JDUBTX/ && 
       PATH=/QOpenSys/pkgs/bin:$PATH &&
       git pull origin main &&
+      cl \"CLRLIB LIB(JWEIRICH2)\" &&
       makei b &&
       cl \"CRTSAVF FILE(${APP_LIBRARY}/${SAVFNAME}) TEXT('${CI_PROJECT_NAME}')\" &&
       cl \"SAVLIB LIB(JWEIRICH2) DEV(*SAVF) SAVF(JWEIRICH1/${SAVFNAME}) SAVACT(*NO)\" &&
