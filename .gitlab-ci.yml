@@ -55,15 +55,18 @@ build-job:
       makei b &&
       exit" | tee ssh-out.txt)
     
-    # Check Output 
+    - |
+      # Check Output 
       case "$OUTPUT" in 
       *'make: Nothing to be done'*)
         echo "Nothing Compiled"
         ;;
       *'Build Completed!'*)
+        echo "Compile Successful"
         ;;
       *)
         echo "Build Failed"
+        ;;
       esac    
     - echo "Compile complete."
 
