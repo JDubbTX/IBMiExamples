@@ -84,5 +84,6 @@ deploy-integration:      # This job runs in the deploy stage.
     - ssh -p 2222 jweirich@pub400.com "cl \"clrlib ${DEPLOY_LIBRARY}\" && exit"
     - sleep 5
     - echo "Uploading Save File"
-    - scp -P 2222 artifacts/${SAVFNAME}.savf JWEIRICH@pub400.com:/QSYS.LIB/${DEPLOY_LIBRARY}.LIB/${SAVFNAME}.FILE 
+    - scp -P 2222 artifacts/${SAVFNAME}.savf JWEIRICH@pub400.com:${TEMP_DIR}/${SAVFNAME}.FILE
+    - ssh -p 2222 jweirich@pub400.com "cp ${TEMP_DIR}/${SAVFNAME}.file /QSYS.LIB/${DEPLOY_LIBRARY}.LIB/GL51643AB2.FILE && exit"
     - echo "Application successfully deployed."
