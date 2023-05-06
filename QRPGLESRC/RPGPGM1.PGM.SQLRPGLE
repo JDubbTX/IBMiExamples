@@ -22,7 +22,7 @@ exec sql fetch c1 into :Cust_ID;
 dow sqlcode = 0;
   // Insert some logic to build a name
   // update forde;
-  exec sql fetch c1 into :Cust_ID;
+  exec sql fetch c1 into :Cust_ID blah;
 ENDDO;
 // new comment
 *inlr = *on;
