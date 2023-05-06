@@ -4,7 +4,7 @@
     "objlib": "DEVLIB",
     "curlib": "DEVLIB",
     "setIBMiEnvCmd": [],
-    "repository" : " https://github.com/JDubbTX/IBMiExamples.git",
+    "repository" : " https://gitlab.com/JDubbTX/IBMiExamples.git",
     "extensions": {
     }
 }
