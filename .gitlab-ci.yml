@@ -52,7 +52,7 @@ build-job:
       PATH=/QOpenSys/pkgs/bin:$PATH && 
       git pull origin main &&
       makei b &&
-      exit"
+      exit")
     
     - |
       # Check Output 
