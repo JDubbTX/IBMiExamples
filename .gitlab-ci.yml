@@ -10,7 +10,6 @@ stages:          # List of stages for jobs, and their order of execution
 before_script:
   - apk update && apk add openssh-client bash
 
-
 build-job:
   # This job runs in the build stage, which runs first.
   stage: build
@@ -24,16 +23,20 @@ build-job:
     # $SSH_KNOWN_HOSTS was output from 'ssh-keyscan -p 2222 pub400.com'
     - mkdir -p ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+    # Set savefile name - cant begin with a #
+    - SAVFNAME='GL' + ${CI_COMMIT_SHORT_SHA}
     # ssh commands here   
     - echo "Compiling the code with SSH and Bob..."
     - >
+      
       OUTPUT=$(ssh -p 2222 jweirich@pub400.com 
       "cd ~/projects/JDUBTX/ && 
       PATH=/QOpenSys/pkgs/bin:$PATH &&
       git pull origin main &&
       makei b &&
-      system CRTSAVF FILE(JWEIRICH1/${CI_COMMIT_SHORT_SHA}) TEXT('${CI_PROJECT_NAME}') &&
-      system SAVLIB LIB(JWEIRICH2) DEV(*SAVF) SAVF(JWEIRICH1/${CI_COMMIT_SHORT_SHA}) SAVACT(*NO) &&
+      cl CRTSAVF FILE(JWEIRICH1/${SAVFNAME}) TEXT('${CI_PROJECT_NAME}') &&
+      cl SAVLIB LIB(JWEIRICH2) DEV(*SAVF) SAVF(JWEIRICH1/${SAVFNAME}) SAVACT(*NO) &&
       exit")
     
     - |
