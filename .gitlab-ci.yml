@@ -77,8 +77,11 @@ lint-test-job:   # This job also runs in the test stage.
 
 deploy-integration:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-  environment: development
+  environment: Integration
   script:
     - echo "Deploying application..."
+    - echo "clearing desitination library"
+    - ssh -p 2222 jweirich@pub400.com "cl \"clrlib ${DEPLOY_LIBRARY}\" && exit"
+    - echo "Uploading Save File"
     - scp -P 2222 artifacts/${SAVFNAME}.savf JWEIRICH@pub400.com:/QSYS.LIB/${DEPLOY_LIBRARY}.LIB/${SAVFNAME}.FILE 
     - echo "Application successfully deployed."
