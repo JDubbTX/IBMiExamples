@@ -50,10 +50,9 @@ build-job:
       OUTPUT=$(ssh -p 2222 jweirich@pub400.com 
       "cd ~/projects/JDUBTX/ && 
       PATH=/QOpenSys/pkgs/bin:$PATH && 
-      git checkout main && 
       git pull origin main &&
       makei b &&
-      exit" | tee ssh-out.txt)
+      exit"
     
     - |
       # Check Output 
