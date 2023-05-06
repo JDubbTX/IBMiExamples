@@ -29,15 +29,14 @@ build-job:
 
     # ssh commands here   
     - echo "Compiling the code with SSH and Bob..."
-    - >
-      
+    - >      
       OUTPUT=$(ssh -p 2222 jweirich@pub400.com 
       "cd ~/projects/JDUBTX/ && 
       PATH=/QOpenSys/pkgs/bin:$PATH &&
       git pull origin main &&
       makei b &&
-      cl "CRTSAVF FILE(JWEIRICH1/${SAVFNAME}) TEXT('${CI_PROJECT_NAME}')" &&
-      cl "SAVLIB LIB(JWEIRICH2) DEV(*SAVF) SAVF(JWEIRICH1/${SAVFNAME}) SAVACT(*NO)" &&
+      cl \"CRTSAVF FILE(JWEIRICH1/${SAVFNAME}) TEXT('${CI_PROJECT_NAME}')\" &&
+      cl \"SAVLIB LIB(JWEIRICH2) DEV(*SAVF) SAVF(JWEIRICH1/${SAVFNAME}) SAVACT(*NO)\" &&
       exit")
     
     - |
