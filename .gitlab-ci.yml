@@ -83,7 +83,6 @@ deploy-integration:      # This job runs in the deploy stage.
     - echo "clearing desitination library"
     - > 
       ssh -p 2222 jweirich@pub400.com "cl \"clrlib ${DEPLOY_LIBRARY}\" && 
-      cl \"crtsavf ${DEPLOY_LIBRARY}/${SAVFNAME}\" &&
       exit"
 
     - echo "Uploading Save File"
