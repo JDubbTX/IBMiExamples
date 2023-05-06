@@ -28,13 +28,15 @@ build-job:
     - >
       OUTPUT=$(ssh -p 2222 jweirich@pub400.com 
       "cd ~/projects/JDUBTX/ && 
-      PATH=/QOpenSys/pkgs/bin:$PATH && 
+      PATH=/QOpenSys/pkgs/bin:$PATH &&
+      system clrlib JWEIRICH2 
       git pull origin main &&
-      makei b &&
+      makei b -e verlibcsy=JWEIRICH2 &&
       exit")
     
     - |
-      # Check Output 
+      # Check Output
+      echo "$OUTPUT" 
       case "$OUTPUT" in 
       *'make: Nothing to be done'*)
         echo "Nothing Compiled"
