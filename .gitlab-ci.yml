@@ -80,5 +80,5 @@ deploy-integration:      # This job runs in the deploy stage.
   environment: development
   script:
     - echo "Deploying application..."
-    - scp -P 2222 artifacts/${SAVFNAME}.savf JWEIRICH@pub400.com:/QSYS.LIB/${DEPLOY_LIBRARY}.LIB 
+    - scp -P 2222 artifacts/${SAVFNAME}.savf JWEIRICH@pub400.com:/QSYS.LIB/${DEPLOY_LIBRARY}.LIB/${SAVFNAME}.FILE 
     - echo "Application successfully deployed."
