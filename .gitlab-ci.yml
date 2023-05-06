@@ -47,13 +47,15 @@ build-job:
         echo "Nothing Compiled"
         ;;
       *'Build Completed!'*)
-        echo "Compile Successful"
+        echo "Compile Successful, downloading save file"
+        scp -P 2222 JWEIRICH@pub400.com:/QSYS.LIB/JWEIRICH1.LIB/${SAVFNAME}.FILE artifacts/${SAVFNAME}.savf
         ;;
       *)
         echo "Compile Failed"
         ;;
       esac    
     - echo "Build job complete."
+
 
 unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
