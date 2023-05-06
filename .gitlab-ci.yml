@@ -48,6 +48,7 @@ build-job:
         ;;
       *'Build Completed!'*)
         echo "Compile Successful, downloading save file"
+        mkdir artifacts
         scp -P 2222 JWEIRICH@pub400.com:/QSYS.LIB/JWEIRICH1.LIB/${SAVFNAME}.FILE artifacts/${SAVFNAME}.savf
         ;;
       *)
