@@ -3,7 +3,7 @@ image: alpine:3.6
 
 #Global variables available to all jobs
 variables:
-  - SAVFNAME="GL${CI_COMMIT_SHORT_SHA}"
+  SAVFNAME: "GL${CI_COMMIT_SHORT_SHA}"
 
 stages:          # List of stages for jobs, and their order of execution
   - build
