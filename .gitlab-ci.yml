@@ -25,7 +25,8 @@ build-job:
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
 
     # Set savefile name - cant begin with a #
-    - SAVFNAME='GL' + ${CI_COMMIT_SHORT_SHA}
+    - SAVFNAME="GL${CI_COMMIT_SHORT_SHA}"
+    
     # ssh commands here   
     - echo "Compiling the code with SSH and Bob..."
     - >
