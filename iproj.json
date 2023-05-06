@@ -1,10 +1,11 @@
 {
     "version": "0.0.1",
     "description": "IBM i Examples",
+    "preUsrlibl": ["JWEIRICH1"],
     "objlib": "JWEIRICH2",
     "curlib": "JWEIRICH2",
     "setIBMiEnvCmd": [],
-    "repository" : " https://github.com/JDubbTX/IBMiExamples.git",
+    "repository" : " https://gitlab.com/JDubbTX/IBMiExamples.git",
     "extensions": {
     }
 }
