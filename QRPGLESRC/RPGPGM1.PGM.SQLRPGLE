@@ -21,6 +21,7 @@ exec sql fetch c1 into :Cust_ID;
 
 dow sqlcode = 0;
   // Insert some logic to build a name
+  // More logic will be added later
   // update forde ;
   exec sql fetch c1 into :Cust_ID;
 ENDDO;
