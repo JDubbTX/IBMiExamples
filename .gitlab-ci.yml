@@ -31,7 +31,9 @@ build-job:
       PATH=/QOpenSys/pkgs/bin:$PATH &&
       system clrlib JWEIRICH2 &&
       git pull origin main &&
-      makei b -e verlibcsy=JWEIRICH2 &&
+      makei b &&
+      CRTSAVF FILE(JWEIRICH1/${CI_COMMIT_SHORT_SHA}) TEXT('${CI_PROJECT_PATH_SLUG}/${CI_PROJECT_NAME}') &&
+      SAVLIB LIB(JWEIRICH2) DEV(*SAVF) SAVF(JWEIRICH1/${CI_COMMIT_SHORT_SHA}) SAVACT(*NO) &&
       exit")
     
     - |
