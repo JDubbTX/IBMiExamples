@@ -9,6 +9,15 @@ stages:          # List of stages for jobs, and their order of execution
 #Global script that runs before each job
 before_script:
   - apk update && apk add openssh-client bash
+  # run ssh-agent
+  - eval $(ssh-agent -s)
+
+  # add private ssh key stored in SSH_PRIVATE_KEY variable to the agent store
+  - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
+
+  # $SSH_KNOWN_HOSTS was output from 'ssh-keyscan -p 2222 pub400.com'
+  - mkdir -p ~/.ssh
+  - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
 
 build-job:
   # This job runs in the build stage, which runs first.
@@ -18,15 +27,6 @@ build-job:
     paths:
       - artifacts/  
   script:
-    # run ssh-agent
-    - eval $(ssh-agent -s)
-
-    # add private ssh key stored in SSH_PRIVATE_KEY variable to the agent store
-    - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
-
-    # $SSH_KNOWN_HOSTS was output from 'ssh-keyscan -p 2222 pub400.com'
-    - mkdir -p ~/.ssh
-    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
 
     # Set savefile name - cant begin with a #
     - SAVFNAME="GL${CI_COMMIT_SHORT_SHA}"
@@ -39,7 +39,7 @@ build-job:
       PATH=/QOpenSys/pkgs/bin:$PATH &&
       git pull origin main &&
       makei b &&
-      cl \"CRTSAVF FILE(JWEIRICH1/${SAVFNAME}) TEXT('${CI_PROJECT_NAME}')\" &&
+      cl \"CRTSAVF FILE(${APP_LIBRARY}/${SAVFNAME}) TEXT('${CI_PROJECT_NAME}')\" &&
       cl \"SAVLIB LIB(JWEIRICH2) DEV(*SAVF) SAVF(JWEIRICH1/${SAVFNAME}) SAVACT(*NO)\" &&
       exit")
     
@@ -53,7 +53,7 @@ build-job:
       *'Build Completed!'*)
         echo "Compile Successful, downloading save file"
         mkdir artifacts
-        scp -P 2222 JWEIRICH@pub400.com:/QSYS.LIB/JWEIRICH1.LIB/${SAVFNAME}.FILE artifacts/${SAVFNAME}.savf
+        scp -P 2222 JWEIRICH@pub400.com:/QSYS.LIB/${APP_LIBRARY}.LIB/${SAVFNAME}.FILE artifacts/${SAVFNAME}.savf
         ;;
       *)
         echo "Compile Failed"
@@ -75,9 +75,10 @@ lint-test-job:   # This job also runs in the test stage.
     - sleep 10
     - echo "No lint issues found."
 
-deploy-job:      # This job runs in the deploy stage.
+deploy-dev:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-  environment: production
+  environment: development
   script:
     - echo "Deploying application..."
+    - scp -P 2222 artifacts/${SAVFNAME}.savf JWEIRICH@pub400.com:/QSYS.LIB/${DEPLOY_LIBRARY}.LIB/${SAVFNAME}.FILE 
     - echo "Application successfully deployed."
