@@ -34,14 +34,14 @@ build-job:
     # ssh commands here   
     - echo "Compiling the code with SSH and Bob..."
     - >      
-      OUTPUT=$(ssh -p 2222 jweirich@pub400.com 
+      OUTPUT=$(ssh -p 2222 ${IBMI_USERID}@pub400.com 
       "cd ~/projects/JDUBTX/ && 
       PATH=/QOpenSys/pkgs/bin:$PATH &&
       git pull origin main &&
-      cl \"CLRLIB LIB(JWEIRICH2)\" &&
+      cl \"CLRLIB LIB(${IBMI_USERID}2)\" &&
       makei b &&
       cl \"CRTSAVF FILE(${APP_LIBRARY}/${SAVFNAME}) TEXT('${CI_PROJECT_NAME}')\" &&
-      cl \"SAVLIB LIB(JWEIRICH2) DEV(*SAVF) SAVF(JWEIRICH1/${SAVFNAME}) SAVACT(*NO)\" &&
+      cl \"SAVLIB LIB(${IBMI_USERID}2) DEV(*SAVF) SAVF(${IBMI_USERID}1/${SAVFNAME}) SAVACT(*NO)\" &&
       exit")
     
     - |
@@ -54,7 +54,7 @@ build-job:
       *'Build Completed!'*)
         echo "Compile Successful, downloading save file"
         mkdir artifacts
-        scp -P 2222 JWEIRICH@pub400.com:/QSYS.LIB/${APP_LIBRARY}.LIB/${SAVFNAME}.FILE artifacts/${SAVFNAME}.savf
+        scp -P 2222 ${IBMI_USERID}@pub400.com:/QSYS.LIB/${APP_LIBRARY}.LIB/${SAVFNAME}.FILE artifacts/${SAVFNAME}.savf
         ;;
       *)
         echo "Compile Failed"
@@ -70,9 +70,11 @@ unit-test-job:   # This job runs in the test stage.
     - echo "Code coverage is 90%"
 
 lint-test-job:   # This job also runs in the test stage.
+  image: node:18.x
   stage: test    # It can run at the same time as unit-test-job (in parallel).
   script:
-    - sleep 10
+    - npm i -g rpglint
+    - rpglint
     - echo "No lint issues found."
 
 deploy-integration:      # This job runs in the deploy stage.
@@ -81,14 +83,14 @@ deploy-integration:      # This job runs in the deploy stage.
   script:
     - echo "Deploying application..."
     - echo "clearing desitination library"
-    - ssh -p 2222 jweirich@pub400.com "cl \"clrlib ${DEPLOY_LIBRARY}\" && exit"
+    - ssh -p 2222 ${IBMI_USERID}@pub400.com "cl \"clrlib ${DEPLOY_LIBRARY}\" && exit"
     - sleep 5
     - echo "Uploading Save File"
-    - scp -P 2222 artifacts/${SAVFNAME}.savf JWEIRICH@pub400.com:${TEMP_DIR}/${SAVFNAME}.FILE
+    - scp -P 2222 artifacts/${SAVFNAME}.savf ${IBMI_USERID}@pub400.com:${TEMP_DIR}/${SAVFNAME}.FILE
     # Copy to QSYS file system and extract contents
-    # If you are trying this on pub400, the following line will fail due to authority issues.
+    # If you are trying this on pub400, the following line will fail due to authority issues with RSTLIB.
     - >
-      ssh -p 2222 jweirich@pub400.com "cp ${TEMP_DIR}/${SAVFNAME}.file /QSYS.LIB/${DEPLOY_LIBRARY}.LIB/GL51643AB2.FILE && 
+      ssh -p 2222 ${IBMI_USERID}@pub400.com "cp ${TEMP_DIR}/${SAVFNAME}.file /QSYS.LIB/${DEPLOY_LIBRARY}.LIB/GL51643AB2.FILE && 
       cl \"RSTLIB SAVLIB(${DEPLOY_LIBRARY}) DEV(*SAVF) SAVF(${DEPLOY_LIBRARY}/${SAVFNAME})\" &&
       exit"
     - echo "Application successfully deployed."
