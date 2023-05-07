@@ -9,7 +9,7 @@ End-Pi;
 dcl-ds Customer_t extname('CUSTOMER') qualified alias template end-ds;
 dcl-s Cust_ID like(Customer_t.CUSTOMER_ID);
 
-// Declare cursor
+//Declare cursor
 exec sql 
   declare c1 cursor for 
   select CUSTOMER_ID
