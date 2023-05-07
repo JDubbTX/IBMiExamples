@@ -71,6 +71,7 @@ unit-test-job:   # This job runs in the test stage.
 
 lint-test-job:   # This job also runs in the test stage.
   image: node:18
+  dependencies: [] #Don't need the save file artifact from the build stage
   before_script:
     - npm i @halcyontech/rpglint -g
   stage: test    # It can run at the same time as unit-test-job (in parallel).
