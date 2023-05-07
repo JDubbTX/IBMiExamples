@@ -82,13 +82,8 @@ deploy-integration:      # This job runs in the deploy stage.
     - echo "Deploying application..."
     - echo "clearing desitination library"
     - ssh -p 2222 jweirich@pub400.com "cl \"clrlib ${DEPLOY_LIBRARY}\" && exit"
+    - sleep 5
     - echo "Uploading Save File"
     - scp -P 2222 artifacts/${SAVFNAME}.savf JWEIRICH@pub400.com:${TEMP_DIR}/${SAVFNAME}.FILE
-    # Copy to QSYS file system and extract contents
-    ->
-      ssh -p 2222 jweirich@pub400.com "cp ${TEMP_DIR}/${SAVFNAME}.file /QSYS.LIB/${DEPLOY_LIBRARY}.LIB/GL51643AB2.FILE && 
-      # If you are trying this on pub400, the following line will fail due to authority issues.
-      cl \"RSTLIB SAVLIB(${DEPLOY_LIBRARY} DEV(*SAVF) SAVF(${DEPLOY_LIBRARY}/${SAVFNAME})\" &&
-      exit"
-    
+    - ssh -p 2222 jweirich@pub400.com "cp ${TEMP_DIR}/${SAVFNAME}.file /QSYS.LIB/${DEPLOY_LIBRARY}.LIB/GL51643AB2.FILE && exit"
     - echo "Application successfully deployed."
