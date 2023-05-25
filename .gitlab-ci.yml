@@ -1,25 +1,51 @@
+# ######################################################################################################
+# This branch runs on gitlab.com shared runners
+# build-job and lint-test-job is fully implemented.
+# deploy-integration is partially implemented but has enough to get you started.
+# unit-test-job is just a placeholder, for now.
+# 
+# ######################################################################################################
+# Variables you must set in Gitlab CiCd variables
+#   IBMI_USERID - The IBM i service account / user ID.  User have ability to SSH to your partition
+#   IBMI_SSH_PORT - The IBM i's SSH Port.  Usually '22', but PUB400.com has it as '2222'.
+#   APP_LIBRARY - The library on the IBM i partition where the application objects are
+#   DEPLOY_LIBRARY - Another libary where new objects will be built and packaged
+#   TEMP_DIR - A temporary IFS library - SAVF package is uploaded here before it is copied to the QSYS
+#              file system.
+#   SSH_KNOWN_HOSTS - Run ssh-keyscan on your local machine to get the public key values from 
+#                     the IBM i and store it as the SSH_KNOWN_HOSTS variable in Gitlab CICD settings.
+#   SSH_PRIVATE_KEY - Run SSH-KEYGEN on the IBM i to generate a private / public key pair.
+#                     The public key must be stored on the IBM i as an AUTHORIZED_KEY
+#                     The private key must be stored as the SSH_PRIVATE_KEY variable in 
+#                     Gitlab CICD settings
+#######################################################################################################
+
+#This tells gitlab.com what version of linux container to run on.  Alpine is a lightweight / faster
+# image than ubuntu, but requires you to take extra steps to install some things like open-ssh and bash 
+image: alpine:3.6
 
 #Global variables available to all jobs
 variables:
   SAVFNAME: "GL${CI_COMMIT_SHORT_SHA}"
 
-stages:          # List of stages for jobs, and their order of execution
+stages:  # List of stages for jobs, and their order of execution
   - build
   - test
   - deploy
 
 #Global script that runs before each job
 before_script:
+  # Install openssh and bash in the alpine linux container
   - apk update && apk add openssh-client bash
   # run ssh-agent
   - eval $(ssh-agent -s)
 
   # add private ssh key stored in SSH_PRIVATE_KEY variable to the agent store
-  - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
+  - bash -c 'ssh-add <(echo "${SSH_PRIVATE_KEY}")'
 
-  # $SSH_KNOWN_HOSTS was output from 'ssh-keyscan -p 2222 pub400.com'
+  # $SSH_KNOWN_HOSTS was output from 'ssh-keyscan -p ${IBMI_SSH_PORT} pub400.com'
   - mkdir -p ~/.ssh
-  - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+  - echo "${SSH_KNOWN_HOSTS}" > ~/.ssh/known_hosts
 
 build-job:
   tags:
@@ -34,7 +60,7 @@ build-job:
     # ssh commands here   
     - echo "Compiling the code with SSH and Bob..."
     - >      
-      OUTPUT=$(ssh -p 2222 ${IBMI_USERID}@pub400.com 
+      OUTPUT=$(ssh -p ${IBMI_SSH_PORT} ${IBMI_USERID}@pub400.com 
       "cd ~/projects/JDUBTX/ && 
       PATH=/QOpenSys/pkgs/bin:$PATH &&
       git pull origin main &&
@@ -54,7 +80,7 @@ build-job:
       *'Build Completed!'*)
         echo "Compile Successful, downloading save file"
         mkdir artifacts
-        scp -P 2222 ${IBMI_USERID}@pub400.com:/QSYS.LIB/${APP_LIBRARY}.LIB/${SAVFNAME}.FILE artifacts/${SAVFNAME}.savf
+        scp -P ${IBMI_SSH_PORT} ${IBMI_USERID}@pub400.com:/QSYS.LIB/${APP_LIBRARY}.LIB/${SAVFNAME}.FILE artifacts/${SAVFNAME}.savf
         ;;
       *)
         echo "Compile Failed"
@@ -85,14 +111,14 @@ deploy-integration:      # This job runs in the deploy stage.
   script:
     - echo "Deploying application..."
     - echo "clearing desitination library"
-    - ssh -p 2222 ${IBMI_USERID}@pub400.com "cl \"clrlib ${DEPLOY_LIBRARY}\" && exit"
+    - ssh -p ${IBMI_SSH_PORT} ${IBMI_USERID}@pub400.com "cl \"clrlib ${DEPLOY_LIBRARY}\" && exit"
     - sleep 5
     - echo "Uploading Save File"
-    - scp -P 2222 artifacts/${SAVFNAME}.savf ${IBMI_USERID}@pub400.com:${TEMP_DIR}/${SAVFNAME}.FILE
+    - scp -P ${IBMI_SSH_PORT} artifacts/${SAVFNAME}.savf ${IBMI_USERID}@pub400.com:${TEMP_DIR}/${SAVFNAME}.FILE
     # Copy to QSYS file system and extract contents
     # If you are trying this on pub400, the following line will fail due to authority issues with RSTLIB.
     - >
-      ssh -p 2222 ${IBMI_USERID}@pub400.com "cp ${TEMP_DIR}/${SAVFNAME}.file /QSYS.LIB/${DEPLOY_LIBRARY}.LIB/GL51643AB2.FILE && 
-      cl \"RSTLIB SAVLIB(${DEPLOY_LIBRARY}) DEV(*SAVF) SAVF(${DEPLOY_LIBRARY}/${SAVFNAME})\" &&
+      ssh -p ${IBMI_SSH_PORT} ${IBMI_USERID}@pub400.com "cp ${TEMP_DIR}/${SAVFNAME}.file /QSYS.LIB/${DEPLOY_LIBRARY}.LIB/GL51643AB2.FILE && 
+    #  cl \"RSTLIB SAVLIB(${DEPLOY_LIBRARY}) DEV(*SAVF) SAVF(${DEPLOY_LIBRARY}/${SAVFNAME})\" &&
       exit"
     - echo "Application successfully deployed."
