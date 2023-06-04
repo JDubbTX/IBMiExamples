@@ -1,0 +1,23 @@
+             PGM        PARM(&MSGQ &TEMPLIB)
+
+             DCL        VAR(&MSGQ) TYPE(*CHAR) LEN(30)
+             DCL        VAR(&TEMPLIB) TYPE(*CHAR) LEN(10)             
+             DCL        VAR(&MSG) TYPE(*CHAR) LEN(128)
+             DCL        VAR(&TMPLIB) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&CNT) TYPE(*DEC) LEN(5 0) VALUE(0)
+
+             /* This sample program recieves messages */
+LOOP:        RCVMSG MSGQ(QUSRSYS/&MSGQ) WAIT(2) +
+                    MSGTYPE(*LAST) MSG(&MSG)
+                    
+             IF COND(%SCAN('restored into temporary library' &MSG) *NE 0) + 
+                THEN(GOTO CONT)
+             IF COND(&CNT *GE 10) THEN(GOTO ERROR)
+             CHGVAR &CNT (&CNT + 1)
+             GOTO LOOP
+
+ERROR:       SNDPGMMSG 'TEMP LIB NOT FOUND'
+             GOTO END
+
+CONT:       CHGVAR &TEMPLIB %SST(&MSG 68 10)
+END:        ENDPGM
