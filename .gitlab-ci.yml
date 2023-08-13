@@ -123,8 +123,8 @@ deploy-integration:      # This job runs in the deploy stage.
     # If you are using this logic on your own IBM i (not PUB400.com), you'll want to use RSTLIB instead.
     - >
       ssh -p ${IBMI_SSH_PORT} ${IBMI_USERID}@pub400.com "cp ${TEMP_DIR}/${SAVFNAME}.file /QSYS.LIB/${DEPLOY_LIBRARY}.LIB/GL51643AB2.FILE && 
-      cl \"RESTLIB LIBNAM(JWEIRICH2) SAVFNAM(SAVFNAM) SAVFLIB(JWEIRICH1)" &&
+      cl \"RESTLIB LIBNAM(JWEIRICH2) SAVFNAM(SAVFNAM) SAVFLIB(JWEIRICH1)\" &&
       sleep 10 &&
-      templib=$(cl dspmsg jweirich | grep "has been restored into temporary library" | awk '{print $12}') &&
+      templib=$(cl dspmsg jweirich | grep \"has been restored into temporary library\" | awk '{print $12}') &&
       exit"
     - echo "Application successfully deployed."
