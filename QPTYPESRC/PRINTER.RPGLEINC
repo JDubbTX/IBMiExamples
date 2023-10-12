@@ -1,5 +1,5 @@
 **FREE  
 Dcl-Pr print_this extproc('print_this');
-  inLabel char(20) const;
+  inLabel char(21) const;
   inValue varchar(100) const;
 End-Pr;

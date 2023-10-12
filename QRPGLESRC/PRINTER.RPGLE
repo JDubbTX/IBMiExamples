@@ -4,7 +4,7 @@ ctl-opt NoMain;
 // Procedure for Printing to a spool file
 dcl-proc print_this export;
   dcl-pi *n;
-    inLabel char(20) const;
+    inLabel char(21) const;
     inValue varchar(100) const;
   end-pi;
 
