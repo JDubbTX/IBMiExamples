@@ -3,8 +3,8 @@
     "version": "0.0.1",
     "description": "IBM i Examples",
     "preUsrlibl": ["JWEIRICH1"],
-    "objlib": "JWEIRICH2",
-    "curlib": "JWEIRICH2",
+    "objlib": "JWEIRICH1",
+    "curlib": "JWEIRICH1",
     "setIBMiEnvCmd": [],
     "repository" : " https://gitlab.com/JDubbTX/IBMiExamples.git",
     "extensions": {
