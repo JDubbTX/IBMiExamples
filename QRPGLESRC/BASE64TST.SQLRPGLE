@@ -1,4 +1,4 @@
-**free
+**FREE
 ctl-opt actgrp(*new) bnddir('BNDUTIL');
 
 // Start of Main Procedure
@@ -11,21 +11,21 @@ Dcl-S TranslatedTextVarChar VARCHAR(100) CCSID(1208);
 /copy ./qptypesrc/printer.rpgleinc
 
 // Print headings
-print_this('Field Name' : 'Value');
-print_this('---------------------' : '-----------------------------------------------------------');
+printThis('Field Name' : 'Value');
+printThis('---------------------' : '-----------------------------------------------------------');
 
-print_this('PlainText' : %Trim(PlainText));
+printThis('PlainText' : %Trim(PlainText));
 
 // Encode the text into a VARCHAR field
 Exec SQL Values QSYS2.BASE64_ENCODE(:PlainText) Into :EncodedText;
-print_this('EncodedText' : %trim(EncodedText));
+printThis('EncodedText' : %trim(EncodedText));
 
 // Decode the encoded text into an EBCDIC VarBinary field
 Exec SQL Values QSYS2.BASE64_DECODE(:EncodedText) Into :DecodedTextVarBinary;
-print_this('DecodedTextVarBinary' : %trim(DecodedTextVarBinary));
+printThis('DecodedTextVarBinary' : %trim(DecodedTextVarBinary));
 
 // Translate binary data in EBCDIC to UTF-8
 TranslatedTextVarChar = DecodedTextVarBinary;
-print_this('TranslatedTextVarChar' : %trim(TranslatedTextVarChar));
+printThis('TranslatedTextVarChar' : %trim(TranslatedTextVarChar));
 
 return;
