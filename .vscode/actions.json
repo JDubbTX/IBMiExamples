@@ -1,7 +1,7 @@
 [
   {
     "name": "Create RPGLE Program",
-    "command": "CRTBNDRPG PGM(&CURLIB/&NAME) SRCSTMF('&RELATIVEPATH') OPTION(*EVENTF) DBGVIEW(*SOURCE) TGTCCSID(*JOB)",
+    "command": "?CRTBNDRPG PGM(&CURLIB/&NAME) SRCSTMF('&RELATIVEPATH') OPTION(*EVENTF) DBGVIEW(*SOURCE) TGTCCSID(*JOB)",
     "deployFirst": true,
     "environment": "ile",
     "extensions": [
@@ -10,7 +10,7 @@
   },
   {
     "name": "Create RPGLE Module",
-    "command": "CRTRPGMOD MODULE(&CURLIB/&NAME) SRCSTMF('&RELATIVEPATH') OPTION(*EVENTF) DBGVIEW(*SOURCE) TGTCCSID(*JOB)",
+    "command": "?CRTRPGMOD MODULE(&CURLIB/&NAME) SRCSTMF('&RELATIVEPATH') OPTION(*EVENTF) DBGVIEW(*SOURCE) TGTCCSID(*JOB)",
     "deployFirst": true,
     "environment": "ile",
     "extensions": [
@@ -19,7 +19,7 @@
   },
   {
     "name": "Create SQLRPGLE Program",
-    "command": "CRTSQLRPGI OBJ(&CURLIB/&NAME) SRCSTMF('&RELATIVEPATH') OPTION(*EVENTF) DBGVIEW(*SOURCE) CLOSQLCSR(*ENDMOD) CVTCCSID(*JOB) COMPILEOPT('TGTCCSID(*JOB)')",
+    "command": "?CRTSQLRPGI OBJ(&CURLIB/&NAME) SRCSTMF('&RELATIVEPATH') OPTION(*EVENTF) DBGVIEW(*SOURCE) CLOSQLCSR(*ENDMOD) CVTCCSID(*JOB) COMPILEOPT('TGTCCSID(*JOB)')",
     "deployFirst": true,
     "environment": "ile",
     "extensions": [
@@ -28,7 +28,7 @@
   },
   {
     "name": "Create SQLRPGLE Module",
-    "command": "CRTSQLRPGI OBJ(&CURLIB/&NAME) SRCSTMF('&RELATIVEPATH') OBJTYPE(*MODULE) OPTION(*EVENTF) DBGVIEW(*SOURCE) CLOSQLCSR(*ENDMOD) CVTCCSID(*JOB) COMPILEOPT('TGTCCSID(*JOB)')",
+    "command": "?CRTSQLRPGI OBJ(&CURLIB/&NAME) SRCSTMF('&RELATIVEPATH') OBJTYPE(*MODULE) OPTION(*EVENTF) DBGVIEW(*SOURCE) CLOSQLCSR(*ENDMOD) CVTCCSID(*JOB) COMPILEOPT('TGTCCSID(*JOB)')",
     "deployFirst": true,
     "environment": "ile",
     "extensions": [
@@ -41,7 +41,7 @@
       "CLLE"
     ],
     "name": "Create Bound CL Program",
-    "command": "CRTBNDCL PGM(&CURLIB/&NAME) SRCSTMF('&RELATIVEPATH') OPTION(*EVENTF) DBGVIEW(*SOURCE)",
+    "command": "?CRTBNDCL PGM(&CURLIB/&NAME) SRCSTMF('&RELATIVEPATH') OPTION(*EVENTF) DBGVIEW(*SOURCE)",
     "deployFirst": true,
     "environment": "ile"
   },
@@ -49,10 +49,19 @@
     "extensions": [
       "GLOBAL"
     ],
-    "name": "Create Service Program (CRTSRVPGM)",
-    "command": "CRTSRVPGM SRVPGM(&CURLIB/&NAME) EXPORT(*ALL) BNDSRVPGM(*NONE) BNDDIR(*NONE) ACTGRP(*CALLER)",
+    "name": "Create Service Program (CRTSRVPGM with EXPORT ALL)",
+    "command": "?CRTSRVPGM SRVPGM(&CURLIB/&NAME) EXPORT(*ALL) BNDSRVPGM(*NONE) BNDDIR(*NONE) ACTGRP(*CALLER)",
     "environment": "ile"
   },
+  {
+    "extensions": [
+      "BND"
+    ],
+    "name": "Create Service Program (CRTSRVPGM with Binder Language)",
+    "command": "?CRTSRVPGM SRVPGM(&CURLIB/&NAME) SRCSTMF('&FULLPATH') ACTGRP(*CALLER) TEXT('?')",
+    "environment": "ile"
+  },
+  
   {
     "extensions": [
       "GLOBAL"

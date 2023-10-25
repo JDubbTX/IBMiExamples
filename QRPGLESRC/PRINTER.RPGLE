@@ -4,9 +4,12 @@
 // More info at https://jdubbtx.github.io/2023/10/16/How-to-Build-a-Service-Program.html
 // -------------------------------------------------------------------------------------
 Ctl-Opt NoMain Option(*SrcStmt) ReqPrExp(*Require);
-/Copy ./qptypesrc/printer.rpgleinc
+/COPY ./QPTYPESRC/PRINTER.RPGLEINC
 
-// Procedure for Printing to a spool file
+///
+// Title: printThis
+// Description: Print stuff in 2 columns
+///
 Dcl-Proc printThis Export;
   Dcl-Pi *N; 
     inLabel Char(21) Const;
@@ -17,12 +20,12 @@ Dcl-Proc printThis Export;
   Dcl-Ds line Len(132) Inz Qualified;
     label    Char(21);
     *N       Char(1);
-    val      Char(100);
+    val      char(100);
   End-Ds;
 
   line.label = inLabel;
   line.val = inValue;
-  Write QPRINT line;
+  write QPRINT line;
 
   Return;
   

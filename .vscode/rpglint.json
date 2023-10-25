@@ -9,11 +9,42 @@
   "NoSQLJoins": true,
   "PrettyComments": true,
   "NoGlobalSubroutines": true,
+  "BlankStructNamesCheck": true,
+  "IncludeMustBeRelative": false,
+  "NoCTDATA": true,
+  "CopybookDirective": "copy",
+  "ForceOptionalParens": true,
+  "NoExecuteImmediate": true,
+  "NoExtProgramVariable": false,
+  "NoGlobalsInProcedures": true,
+  "NoLocalSubroutines": true,
+  "NoUnreferenced": false,
+  "QualifiedCheck": true,
+  "RequireBlankSpecial": true,
+  "RequireOtherBlock": true,
+  "RequiresParameter": true,
+  "RequiresProcedureDescription": true,
+  "SQLHostVarCheck": true,
+  "UppercaseDirectives": true,
   "NoExternalTo": [
     "QCMD",
     "QP2TERM",
     "QSH",
     "SYSTEM",
     "QCMDEXC"
+  ],
+  "SpecificCasing": [
+    {
+      "operation": "varchar",
+      "expected": "VarChar"
+    },
+    {
+      "operation": "sqltype",
+      "expected": "SqlType"
+    },
+    {
+      "operation": "dcl-f",
+      "expected": "Dcl-F"
+    }
   ]
 }
