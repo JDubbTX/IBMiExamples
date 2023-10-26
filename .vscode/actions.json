@@ -58,7 +58,7 @@
       "BND"
     ],
     "name": "Create Service Program (CRTSRVPGM with Binder Language)",
-    "command": "?CRTSRVPGM SRVPGM(&CURLIB/&NAME) SRCSTMF('&FULLPATH') ACTGRP(*CALLER) TEXT('?')",
+    "command": "?CRTSRVPGM TEXT('?') SRVPGM(&CURLIB/&NAME) SRCSTMF('&FULLPATH') ACTGRP(*CALLER) OPT=*EVENTF",
     "environment": "ile"
   },
   

@@ -1,4 +1,8 @@
 **Free
+///
+// Title: printThis
+// Description: Print stuff in 2 columns
+///
 Dcl-Pr printThis ExtProc(*DclCase);
   inLabel Char(21) Const;
   inValue VarChar(100) Const;
