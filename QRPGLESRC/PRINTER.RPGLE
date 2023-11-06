@@ -5,10 +5,9 @@
 // -------------------------------------------------------------------------------------
 Ctl-Opt NoMain Option(*SrcStmt) ReqPrExp(*Require);
 /COPY ./QPTYPESRC/PRINTER.RPGLEINC
-
 ///
 // Title: printThis
-// Description: Print stuff in 2 columns
+// Description: Print stuff in 2 columns.
 ///
 Dcl-Proc printThis Export;
   Dcl-Pi *N; 

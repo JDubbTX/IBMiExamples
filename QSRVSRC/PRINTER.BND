@@ -1,3 +1,4 @@
+/* Binder Language for PRINTER Service Program */
 STRPGMEXP PGMLVL(*CURRENT) SIGNATURE('PRINTER    V0001')
     EXPORT SYMBOL("printThis")
 ENDPGMEXP

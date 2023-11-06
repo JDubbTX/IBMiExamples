@@ -10,7 +10,7 @@
   },
   {
     "name": "Create RPGLE Module",
-    "command": "?CRTRPGMOD MODULE(&CURLIB/&NAME) SRCSTMF('&RELATIVEPATH') OPTION(*EVENTF) DBGVIEW(*SOURCE) TGTCCSID(*JOB)",
+    "command": "CRTRPGMOD MODULE(&CURLIB/&NAME) TEXT('${text|Enter a text description for the Module}') SRCSTMF('&RELATIVEPATH') OPTION(*EVENTF) DBGVIEW(*SOURCE) TGTCCSID(*JOB)",
     "deployFirst": true,
     "environment": "ile",
     "extensions": [
@@ -58,7 +58,7 @@
       "BND"
     ],
     "name": "Create Service Program (CRTSRVPGM with Binder Language)",
-    "command": "CRTSRVPGM TEXT('${text|Enter a text description for the Service Program}') SRVPGM(&CURLIB/&NAME) SRCSTMF('&FULLPATH') ACTGRP(*CALLER)",
+    "command": "CRTSRVPGM TEXT('${text|Enter a text description for the Service Program}') SRVPGM(&CURLIB/&NAME) SRCSTMF('&RELATIVEPATH') ACTGRP(*CALLER)",
     "environment": "ile"
   },
   
