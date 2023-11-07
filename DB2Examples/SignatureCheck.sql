@@ -32,7 +32,7 @@ SELECT PROGRAM_NAME
 , UNHEX(CAST(a.BOUND_SERVICE_PROGRAM_SIGNATURE as VARCHAR(32000))) as BOUND_SERVICE_PROGRAM_SIGNATURE_UNHEXED
   FROM QSYS2.BOUND_SRVPGM_INFO a
   WHERE PROGRAM_LIBRARY = current_schema
-  and program_name = 'BASE64TST'
+  -- and program_name = 'BASE64TST' uncomment to target a specific program
   and bound_service_program_library != 'QSYS'
   ;
 
@@ -48,7 +48,8 @@ SELECT PROGRAM_LIBRARY
 , UNHEX( CAST(EXPORT_SIGNATURES as VARCHAR(32000))) as EXPORT_SIGNATURES_UNHEXED
  FROM QSYS2.PROGRAM_INFO
  WHERE PROGRAM_LIBRARY = current_schema
- and PROGRAM_NAME = 'PRINTER';
+ --  and PROGRAM_NAME = 'PRINTER' uncomment to target a specific sercie program
+ ;
 
 --We can combine the two queries as cte's, check if the signatures match.  If not, we should update the signature
 With PROGRAMS as 
