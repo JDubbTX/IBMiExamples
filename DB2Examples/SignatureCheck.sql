@@ -16,6 +16,7 @@ SELECT a.*
 
 -- The signature is not readable as its blob character data.
 -- To get it readable, first create an unhex user defined function (udf).
+-- This only needs to be run one time.
 CREATE OR REPLACE FUNCTION unhex(in VARCHAR(32000))
 RETURNS VARCHAR(32000)
 RETURN in;
