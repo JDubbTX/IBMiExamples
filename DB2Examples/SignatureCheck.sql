@@ -6,7 +6,7 @@
 -- your programs and service programs are stored
 set current_schema = 'JWEIRICH1';
 
--- Now lets query bound service program info in our program named 'BASE64TST'.
+-- Now lets query bound service program info in our program lib.
 SELECT a.*
   FROM QSYS2.BOUND_SRVPGM_INFO a
   WHERE PROGRAM_LIBRARY = current_schema
@@ -38,7 +38,6 @@ SELECT PROGRAM_NAME
 
 -- The BOUND_SERVICE_PROGRAM_SIGNATURE field contains the signature.
 -- Its a binary / hex representation of the signature.
-
 SELECT PROGRAM_LIBRARY
 , PROGRAM_NAME
 , PROGRAM_LIBRARY
@@ -51,8 +50,8 @@ SELECT PROGRAM_LIBRARY
  --  and PROGRAM_NAME = 'PRINTER' uncomment to target a specific sercie program
  ;
 
---We can combine the two queries as cte's, check if the signatures match.  If not, we should update the signature
-With PROGRAMS as 
+--We can combine the two queries as cte's, check if the signatures match.  If not, update the signature
+With PROGRAMS as -- Programs CTE
 (SELECT PROGRAM_NAME
 , PROGRAM_LIBRARY
 , OBJECT_TYPE
@@ -64,7 +63,7 @@ With PROGRAMS as
   WHERE PROGRAM_LIBRARY = current_schema
     and bound_service_program_library != 'QSYS'
   ),
-  SERVICE_PROGRAMS as 
+  SERVICE_PROGRAMS as --Servce Program CTE
   (SELECT PROGRAM_NAME
 , PROGRAM_LIBRARY
 , EXPORT_SIGNATURES
@@ -72,7 +71,7 @@ With PROGRAMS as
   FROM QSYS2.PROGRAM_INFO
   WHERE PROGRAM_LIBRARY = current_schema
   )
-  SELECT PROGRAMS.PROGRAM_NAME -- final select
+  SELECT PROGRAMS.PROGRAM_NAME -- final select that joins them together based on bound service program name
   , PROGRAMS.PROGRAM_LIBRARY
   , PROGRAMS.BOUND_SERVICE_PROGRAM
   , PROGRAMS.BOUND_SERVICE_PROGRAM_LIBRARY
