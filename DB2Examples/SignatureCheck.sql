@@ -10,7 +10,6 @@ set current_schema = 'JWEIRICH1';
 SELECT a.*
   FROM QSYS2.BOUND_SRVPGM_INFO a
   WHERE PROGRAM_LIBRARY = current_schema
-  and program_name = 'BASE64TST'
   and bound_service_program_library != 'QSYS'
   ;
 
