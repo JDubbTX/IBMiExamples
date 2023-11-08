@@ -20,7 +20,7 @@ exec sql open c1;
 
 exec sql fetch c1 into :Cust_ID;
 
-dow sqlcode = 0;
+dow (sqlcode = 0);
   // Insert some logic to build a name
   // More logic to be added later
   // update forde ;
