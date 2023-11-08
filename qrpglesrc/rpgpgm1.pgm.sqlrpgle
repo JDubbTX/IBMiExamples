@@ -17,6 +17,7 @@ exec sql
   where substr(CUSTOMER_ID , 7 , 2) >= :RangeStart
     and substr(CUSTOMER_ID , 7 , 2) <= :RangeEnd;
 exec sql open c1;
+
 exec sql fetch c1 into :Cust_ID;
 
 dow sqlcode = 0;
