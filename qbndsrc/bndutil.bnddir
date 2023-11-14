@@ -1,3 +1,4 @@
+/* delete and recreate binding directory */
 DLTOBJ OBJ(&O/&N) OBJTYPE(*BNDDIR)
 CRTBNDDIR BNDDIR(&O/&N)
 ADDBNDDIRE BNDDIR(&O/&N) +
