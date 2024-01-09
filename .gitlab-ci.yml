@@ -48,8 +48,7 @@ before_script:
   - echo "${SSH_KNOWN_HOSTS}" > ~/.ssh/known_hosts
 
 build-job:
-  tags:
-    - alpine
+
   # This job runs in the build stage, which runs first.
   stage: build
   artifacts:
